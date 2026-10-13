@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Экономическая политика: Рынок и Государство — 16:9 · Garamond</title>
+<style>
+  :root{
+    /* Палитра: тёмные фоны */
+    --petrol:#123f42;      /* нефтяной */
+    --petrol-deep:#0a2b2e;
+    --amethyst:#3f1d47;    /* аметистовый */
+    --amethyst-deep:#2a1230;
+    --berry:#1b1f36;       /* черника */
+    --berry-deep:#111425;
+    /* Палитра: светлый текст */
+    --sand:#e9d6ae;        /* песочный */
+    --silver:#d6dae2;      /* серебристый */
+    --pearl:#f7f1e3;       /* жемчужный */
+    --gold:#c9a548;        /* золотой акцент (как перекладина в референсах) */
+    --muted:#c2c9d6;
+    /* Тонировка: прозрачная, не чисто чёрная */
+    --veil:rgba(10,12,20,.30);
+    --veil-soft:rgba(10,12,20,.22);
+    --line:rgba(233,214,174,.22);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;overflow:hidden;
+    font-family:Garamond,'EB Garamond','Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;
+    color:var(--pearl);background:#07080f;}
+
+  /* ---------- сцена 16:9 ---------- */
+  #stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;
+    transform:translate(-50%,-50%) scale(1);transform-origin:center;
+    background:
+      radial-gradient(900px 620px at 85% -10%,rgba(63,29,71,.85) 0%,transparent 60%),
+      radial-gradient(820px 600px at -8% 112%,rgba(18,63,66,.9) 0%,transparent 58%),
+      radial-gradient(1200px 900px at 50% 50%,rgba(27,31,54,.6) 0%,transparent 70%),
+      linear-gradient(135deg,var(--petrol-deep) 0%,var(--berry-deep) 45%,var(--amethyst-deep) 100%);
+    box-shadow:0 0 140px rgba(0,0,0,.7) inset;overflow:hidden;}
+  /* текстура + минимальная тонировка поверх фона, под текстом */
+  #stage::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+    background:
+      repeating-linear-gradient(115deg,rgba(255,255,255,.015) 0 2px,transparent 2px 6px),
+      radial-gradient(700px 500px at 20% 20%,rgba(201,165,72,.05),transparent 60%),
+      var(--veil);}
+  #stage::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.5;
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.6px);
+    background-size:26px 26px;}
+
+  /* ---------- сцены ---------- */
+  .scene{position:absolute;inset:0;z-index:2;display:none;flex-direction:column;
+    align-items:center;justify-content:center;padding:48px 72px;text-align:center;
+    opacity:0;transform:scale(.97);transition:opacity .7s ease,transform .7s ease;}
+  .scene.active{display:flex;opacity:1;transform:scale(1);}
+
+  /* ---------- типографика: средне-большая, чёткая ---------- */
+  h1{font-size:60px;line-height:1.14;font-weight:700;letter-spacing:.02em;
+    color:var(--pearl);
+    background:linear-gradient(92deg,var(--sand) 10%,var(--pearl) 45%,var(--sand) 90%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 3px 10px rgba(0,0,0,.55));
+    text-shadow:none;}
+  h2{font-size:42px;margin-bottom:26px;font-weight:700;color:var(--pearl);letter-spacing:.015em;
+    filter:drop-shadow(0 3px 8px rgba(0,0,0,.5));}
+  h2 .num{display:inline-grid;place-items:center;width:56px;height:56px;border-radius:14px;
+    background:linear-gradient(135deg,var(--gold),#8a6d2a);color:#14100a;font-size:30px;
+    margin-right:14px;vertical-align:middle;box-shadow:0 6px 18px rgba(201,165,72,.35);}
+  .subtitle{font-size:23px;color:var(--muted);max-width:980px;margin-top:16px;line-height:1.5;
+    text-shadow:0 2px 6px rgba(0,0,0,.6);}
+  .tag{display:inline-block;padding:7px 22px;border-radius:99px;border:1px solid var(--line);
+    background:var(--veil-soft);color:var(--sand);letter-spacing:.24em;text-transform:uppercase;
+    font-size:15px;margin-bottom:20px;backdrop-filter:blur(6px);
+    text-shadow:0 2px 5px rgba(0,0,0,.5);}
+
+  /* ---------- карточки с прозрачной тонировкой ---------- */
+  .grid{display:grid;gap:16px;width:1136px;}
+  .card{background:var(--veil-soft);border:1px solid var(--line);border-radius:16px;
+    padding:18px 22px;text-align:left;backdrop-filter:blur(10px);
+    box-shadow:0 10px 32px rgba(0,0,0,.35);
+    opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease,border-color .3s;}
+  .card.in{opacity:1;transform:translateY(0);}
+  .card:hover{border-color:var(--sand);transform:translateY(-4px);}
+  .card h3{font-size:22px;margin-bottom:8px;display:flex;align-items:center;gap:10px;color:var(--pearl);
+    text-shadow:0 2px 5px rgba(0,0,0,.5);}
+  .card p{font-size:18px;color:var(--muted);line-height:1.45;text-shadow:0 1px 4px rgba(0,0,0,.5);}
+  .ico{width:36px;height:36px;flex:0 0 auto;display:grid;place-items:center;border-radius:10px;
+    font-size:19px;background:linear-gradient(135deg,#2e6b6e,#123f42);border:1px solid rgba(214,218,226,.25);}
+  .ico.warn{background:linear-gradient(135deg,#5c2a33,#3a1520);}
+  .ico.ok{background:linear-gradient(135deg,#3d5a3a,#1f351f);}
+
+  .g2{grid-template-columns:repeat(2,1fr);}
+  .g3{grid-template-columns:repeat(3,1fr);}
+  .g4{grid-template-columns:repeat(4,1fr);}
+  .g5{grid-template-columns:repeat(5,1fr);}
+
+  /* ---------- пирамида целей ---------- */
+  .pyramid{display:flex;flex-direction:column;align-items:center;gap:8px;width:780px;}
+  .pyr{color:#14100a;font-weight:700;padding:13px 16px;clip-path:polygon(5% 0,95% 0,100% 100%,0 100%);
+    font-size:21px;
+    opacity:0;transform:translateY(36px) scale(.92);transition:all .6s cubic-bezier(.34,1.56,.64,1);}
+  .pyr.in{opacity:1;transform:none;}
+  .pyr small{display:block;font-weight:500;font-size:16px;opacity:.85;}
+  .p1{width:40%;background:linear-gradient(90deg,#e9d6ae,#c9a548);}
+  .p2{width:64%;background:linear-gradient(90deg,#d6dae2,#9aa3b2);color:#141824;}
+  .p3{width:88%;background:linear-gradient(90deg,#b48ec2,#6d3b7a);color:#fff;}
+  .p4{width:100%;background:linear-gradient(90deg,#f7f1e3,#cbb98d);}
+
+  /* ---------- спрос/предложение ---------- */
+  .chart-wrap{display:flex;gap:44px;align-items:center;justify-content:center;}
+  .chart{width:480px;}
+  .axis{stroke:rgba(247,241,227,.4);stroke-width:2;}
+  .curve{fill:none;stroke-width:5;stroke-linecap:round;
+    stroke-dasharray:620;stroke-dashoffset:620;transition:stroke-dashoffset 1.5s ease;}
+  .curve.in{stroke-dashoffset:0;}
+  .d-curve{stroke:#e9d6ae;} .s-curve{stroke:#d6dae2;}
+  .dot{fill:var(--gold);opacity:0;transition:opacity .4s;}
+  .dot.in{opacity:1;animation:pulse 1.6s infinite;}
+  .lbl{font-size:16px;fill:var(--muted);opacity:0;transition:opacity .6s;font-family:inherit;}
+  .lbl.in{opacity:1;}
+  @keyframes pulse{0%,100%{r:8;}50%{r:11;}}
+  .price-note{font-size:19px;color:var(--muted);max-width:330px;text-align:left;line-height:1.55;
+    text-shadow:0 2px 5px rgba(0,0,0,.5);}
+  .price-note b{color:var(--sand);}
+  .eq-line{stroke:var(--gold);stroke-width:2;stroke-dasharray:6 5;}
+
+  /* ---------- четыре системы ---------- */
+  .quad{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;width:1136px;}
+  .sys{border-radius:16px;padding:18px 20px;border:1px solid var(--line);background:var(--veil-soft);
+    backdrop-filter:blur(10px);
+    opacity:0;transform:rotateY(70deg);transition:all .7s ease;backface-visibility:hidden;}
+  .sys.in{opacity:1;transform:rotateY(0);}
+  .sys h3{margin-bottom:8px;font-size:21px;}
+  .sys ul{list-style:none;font-size:17px;color:var(--muted);line-height:1.55;text-align:left;}
+  .sys li::before{content:'▸ ';color:var(--sand);}
+  .sys .badge{font-size:13px;padding:3px 10px;border-radius:99px;float:right;font-family:inherit;}
+  .b-now{background:var(--gold);color:#14100a;font-weight:700;}
+  .b-past{background:#8b93a3;color:#141824;}
+  .b-ideal{background:#e9d6ae;color:#14100a;}
+  .b-fail{background:#8a4a52;color:#fff;}
+
+  /* ---------- рынок vs государство ---------- */
+  .versus{display:flex;gap:26px;align-items:stretch;justify-content:center;}
+  .vs-col{width:430px;border-radius:18px;padding:22px 26px;background:var(--veil-soft);
+    border:1px solid var(--line);backdrop-filter:blur(10px);
+    opacity:0;transition:all .7s ease;}
+  .vs-col.left{transform:translateX(-50px);}
+  .vs-col.right{transform:translateX(50px);}
+  .vs-col.in{opacity:1;transform:none;}
+  .vs-col h3{font-size:25px;margin-bottom:10px;color:var(--pearl);}
+  .vs-col ul{list-style:none;font-size:19px;line-height:1.65;color:var(--muted);text-align:left;
+    text-shadow:0 1px 4px rgba(0,0,0,.5);}
+  .vs-col li::before{content:'✓ ';color:#9ec79a;font-weight:700;}
+  .vs-col.bad li::before{content:'✗ ';color:#c98a8a;}
+  .vs-badge{align-self:center;font-size:44px;font-weight:700;color:var(--gold);
+    text-shadow:0 0 26px rgba(201,165,72,.55);animation:spin 7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ---------- финал ---------- */
+  .final{font-size:30px;line-height:1.5;max-width:1020px;text-shadow:0 2px 8px rgba(0,0,0,.55);}
+  .final .hl{color:var(--sand);font-weight:700;}
+  .final .hl2{color:var(--silver);font-weight:700;}
+  .scale{font-size:22px;margin-top:22px;padding:16px 26px;border-radius:16px;
+    border:1px dashed var(--gold);background:rgba(201,165,72,.09);opacity:0;transition:opacity .8s;
+    max-width:1020px;line-height:1.5;}
+  .scale.in{opacity:1;}
+  .scale span{display:inline-block;animation:sway 2.4s ease-in-out infinite;color:var(--gold);}
+  @keyframes sway{0%,100%{transform:translateX(0);}50%{transform:translateX(6px);}}
+
+  /* ---------- навигация (вне сцены, фикс.) ---------- */
+  #progress{position:fixed;top:0;left:0;height:4px;width:0;z-index:60;
+    background:linear-gradient(90deg,var(--gold),var(--sand));transition:width .5s ease;
+    box-shadow:0 0 12px rgba(201,165,72,.7);}
+  #counter{position:fixed;bottom:18px;right:24px;color:var(--sand);font-size:17px;z-index:60;
+    background:rgba(10,12,20,.55);padding:5px 16px;border-radius:99px;border:1px solid var(--line);}
+  #nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:60;}
+  #nav button{cursor:pointer;border:1px solid var(--line);background:rgba(10,12,20,.55);
+    color:var(--pearl);border-radius:12px;padding:8px 20px;font-size:18px;transition:.25s;
+    font-family:inherit;}
+  #nav button:hover{background:var(--gold);color:#14100a;transform:translateY(-2px);}
+  .hint{position:fixed;bottom:20px;left:24px;color:var(--muted);font-size:14px;z-index:60;opacity:.75;}
+  kbd{background:rgba(255,255,255,.1);border-radius:5px;padding:1px 7px;border:1px solid var(--line);}
+
+  /* частицы */
+  .particle{position:absolute;border-radius:50%;pointer-events:none;z-index:2;
+    background:radial-gradient(circle,rgba(233,214,174,.85),transparent 70%);
+    animation:floatUp linear infinite;}
+  @keyframes floatUp{from{transform:translateY(760px) scale(1);opacity:0;}
+    10%{opacity:.7;}90%{opacity:.5;}to{transform:translateY(-20px) scale(.4);opacity:0;}}
+
+  .type{min-height:1.3em;}
+  .caret{display:inline-block;width:3px;background:var(--gold);animation:blink .8s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .two-col{display:flex;gap:20px;justify-content:center;}
+  .panel{width:550px;border-radius:18px;padding:20px 26px;text-align:left;
+    background:var(--veil-soft);border:1px solid var(--line);backdrop-filter:blur(10px);
+    opacity:0;transform:translateY(26px);transition:all .6s ease;}
+  .panel.in{opacity:1;transform:none;}
+  .panel h3{font-size:22px;margin-bottom:10px;padding:6px 14px;border-radius:10px;display:inline-block;}
+  .panel ul{list-style:none;font-size:18px;color:var(--muted);line-height:1.6;
+    text-shadow:0 1px 4px rgba(0,0,0,.5);}
+  .panel li::before{content:'• ';color:var(--gold);font-weight:900;}
+  .mono .mono-head{background:linear-gradient(135deg,#2e6b6e,#123f42);color:var(--pearl);border:1px solid rgba(214,218,226,.25);}
+  .fisc .fisc-head{background:linear-gradient(135deg,#6d3b7a,#3f1d47);color:var(--pearl);border:1px solid rgba(233,214,174,.25);}
+
+  .flow{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+  .flow .step{padding:10px 20px;border-radius:12px;background:var(--veil-soft);border:1px solid var(--line);
+    font-size:19px;opacity:0;transform:scale(.85);transition:all .5s ease;backdrop-filter:blur(8px);}
+  .flow .step.in{opacity:1;transform:scale(1);}
+  .flow .arrow{color:var(--gold);font-size:26px;opacity:0;transition:opacity .5s .2s;}
+  .flow .arrow.in{opacity:1;animation:nudge 1.2s ease-in-out infinite;}
+  @keyframes nudge{50%{transform:translateX(5px);}}
+  .step.sel{border-color:var(--gold);box-shadow:0 0 20px rgba(201,165,72,.3);color:var(--sand);font-weight:700;}
+
+  .quote{margin-top:22px;font-style:italic;font-size:21px;color:var(--muted);
+    max-width:940px;line-height:1.55;padding:14px 22px;border-left:4px solid var(--gold);
+    background:var(--veil-soft);border-radius:0 14px 14px 0;text-align:left;opacity:0;
+    transition:opacity .8s;backdrop-filter:blur(8px);text-shadow:0 1px 4px rgba(0,0,0,.5);}
+  .quote.in{opacity:1;}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="stage">
+
+<!-- 1 ТИТУЛ -->
+<section class="scene" data-scene>
+  <span class="tag">Курс экономики · Интерактивная лекция</span>
+  <h1>РЫНОК И ГОСУДАРСТВО:<br>экономическая политика в действии</h1>
+  <p class="subtitle">Три темы — одна цепочка: <b style="color:var(--sand)">цели государства</b> → <b style="color:var(--silver)">как работает рынок</b> → <b style="color:#c9a2d6">роль государства</b>. Рынок эффективен, но не идеален. Государство исправляет его ошибки — но тоже ошибается. Экономист ищет баланс.</p>
+  <div class="flow" id="titleFlow">
+    <div class="step">🎯 Тема 1. Цели и планы</div><div class="arrow">➜</div>
+    <div class="step">⚖️ Тема 2. Рынок и его сбои</div><div class="arrow">➜</div>
+    <div class="step">🏛️ Тема 3. Роль государства</div>
+  </div>
+</section>
+
+<!-- 2 ЗАЧЕМ ЭТА ЛЕКЦИЯ -->
+<section class="scene" data-scene>
+  <span class="tag">Карта лекции</span>
+  <h2>Один вопрос — три ответа</h2>
+  <div class="grid g3">
+    <div class="card"><h3><span class="ico">🎯</span>Тема 1: «Что хотим?»</h3><p>Экономическая политика, стратегия и тактика, три уровня целей, макропрограммы на 1–4 года. Государство должно чётко знать, чего хочет.</p></div>
+    <div class="card"><h3><span class="ico">⚙️</span>Тема 2: «Как работает рынок?»</h3><p>Типы экономических систем, равновесная цена, плюсы и минусы рынка, монетарные и фискальные инструменты. Механизм и его сбои.</p></div>
+    <div class="card"><h3><span class="ico">🏛️</span>Тема 3: «Что делает государство?»</h3><p>Три уровня регулирования, участники, прямые и косвенные методы, провалы государства. Роль, методы и ошибки власти.</p></div>
+  </div>
+  <p class="subtitle">Схема каждой темы: <b style="color:var(--sand)">цель → главное → где применяется → зачем экономисту</b>.</p>
+</section>
+
+<!-- 3 ТЕМА 1 ТИТУЛ -->
+<section class="scene" data-scene>
+  <span class="tag">Тема 1 · Теоретические основы</span>
+  <h2><span class="num">1</span>Государственная экономическая политика</h2>
+  <p class="subtitle type" data-type="Что это, зачем нужна, какие цели ставит и какие программы реализует."></p>
+  <p class="subtitle" style="color:var(--sand)">Ключевая идея: политика — это генеральная линия действий государства для достижения целей и решения проблем.</p>
+</section>
+
+<!-- 4 СТРАТЕГИЯ VS ТАКТИКА -->
+<section class="scene" data-scene>
+  <h2>Стратегия и тактика: два масштаба решений</h2>
+  <div class="versus">
+    <div class="vs-col left">
+      <h3>🧭 Стратегия — «куда идём?»</h3>
+      <ul>
+        <li>Долгосрочное видение экономики</li>
+        <li>Общий курс, приоритеты, принципы</li>
+        <li>Отвечает за направление развития</li>
+        <li>Пример: переход к инновационной экономике</li>
+      </ul>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="vs-col right">
+      <h3>🎯 Тактика — «как идём?»</h3>
+      <ul>
+        <li>Конкретные шаги на текущем этапе</li>
+        <li>Инструменты, сроки, исполнители</li>
+        <li>Отвечает за исполнение здесь и сейчас</li>
+        <li>Пример: снизить ключевую ставку на 1 п.п. в этом квартале</li>
+      </ul>
+    </div>
+  </div>
+  <p class="quote">Стратегия без тактики — мечтание. Тактика без стратегии — блуждание.</p>
+</section>
+
+<!-- 5 ТРИ УРОВНЯ ЦЕЛЕЙ -->
+<section class="scene" data-scene>
+  <h2>Три уровня целей экономической политики</h2>
+  <div class="pyramid">
+    <div class="pyr p1">ВЫСШАЯ ЦЕЛЬ<small>благосостояние общества</small></div>
+    <div class="pyr p2">ГЛАВНЫЕ ЦЕЛИ<small>свобода · правопорядок · безопасность</small></div>
+    <div class="pyr p3">ПРИКЛАДНЫЕ ЦЕЛИ<small>рост ВВП · полная занятость · стабильные цены и валюта · внешнее равновесие</small></div>
+    <div class="pyr p4">ИНСТРУМЕНТЫ И ПРОГРАММЫ<small>стабилизационная (1–1,5 года) · структурной корректировки (3–4 года)</small></div>
+  </div>
+  <p class="subtitle">Всё выстраивается в единую систему: от высшей цели — к конкретным программам.</p>
+</section>
+
+<!-- 6 КОНФЛИКТ ЦЕЛЕЙ -->
+<section class="scene" data-scene>
+  <h2>Цели конфликтуют: нельзя получить всё сразу</h2>
+  <div class="grid g3">
+    <div class="card"><h3><span class="ico warn">⚡</span>Рост и занятость ↔ инфляция</h3><p>Стимулируя рост и занятость (расходы вверх, ставка вниз), государство рискует разогнать инфляцию. Экономист называет это компромиссом Филлипса.</p></div>
+    <div class="card"><h3><span class="ico warn">⚖️</span>Равенство ↔ стимулы</h3><p>Равенство доходов ослабляет стимулы к труду и предпринимательству: зачем больше работать, если излишек заберут? Рынок награждает эффективность.</p></div>
+    <div class="card"><h3><span class="ico ok">🧭</span>Выход: приоритеты и сроки</h3><p>Государство выбирает, какая цель важнее сейчас, ставит горизонт планирования и делает прогноз — без него программа слепая.</p></div>
+  </div>
+  <div class="flow" id="progFlow">
+    <div class="step sel">📉 Стабилизационная: 1–1,5 года — быстро исправляет дисбалансы (инфляция, дефицит)</div>
+    <div class="arrow">➜</div>
+    <div class="step">🏗️ Структурной корректировки: 3–4 года — приватизация, демонополизация, реформы</div>
+  </div>
+</section>
+
+<!-- 7 ТЕМА 1 ИТОГ -->
+<section class="scene" data-scene>
+  <h2><span class="num">1</span>Итог темы</h2>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico">🏢</span>Где применяется</h3><p>Правительство, министерства и ведомства, центральный банк — все участники макроэкономического управления.</p></div>
+    <div class="card"><h3><span class="ico">🎓</span>Зачем экономисту</h3><p>Уметь ставить цели, выбирать сроки, видеть, какие цели противоречат друг другу, и понимать, зачем государство принимает те или иные решения.</p></div>
+  </div>
+  <p class="quote">Государство должно чётко знать, чего хочет: цели конфликтуют, поэтому нужны приоритеты, сроки и прогноз.</p>
+</section>
+
+<!-- 8 ТЕМА 2 ТИТУЛ -->
+<section class="scene" data-scene>
+  <span class="tag">Тема 2 · Экономика, рынок и экономическая политика</span>
+  <h2><span class="num">2</span>Как работает рынок — и когда он даёт сбой</h2>
+  <p class="subtitle type" data-type="Четыре экономические системы, признаки рынка, равновесная цена, провалы рынка, инструменты государства."></p>
+</section>
+
+<!-- 9 ЧЕТЫРЕ СИСТЕМЫ -->
+<section class="scene" data-scene>
+  <h2>Четыре типа экономических систем</h2>
+  <div class="quad">
+    <div class="sys"><h3>🏺 Традиционная <span class="badge b-past">прошлое</span></h3>
+      <ul><li>Обычаи и традиции решают всё</li><li>Натуральное хозяйство</li><li>Нет денег и рынков</li></ul></div>
+    <div class="sys"><h3>🏭 Плановая <span class="badge b-fail">дефицит</span></h3>
+      <ul><li>Решает государство</li><li>Нет конкуренции</li><li>Дефицит и низкая эффективность</li></ul></div>
+    <div class="sys"><h3>🛒 Рыночная <span class="badge b-ideal">свобода</span></h3>
+      <ul><li>Частная собственность</li><li>Свободные цены</li><li>Конкуренция и выбор</li></ul></div>
+    <div class="sys" style="border-color:var(--gold);"><h3>🌐 Смешанная <span class="badge b-now">мировой стандарт</span></h3>
+      <ul><li>Рынок + регулирование</li><li>Социально ориентированная</li><li>Мировая тенденция</li></ul></div>
+  </div>
+  <p class="subtitle">Плановая система дала дефицит и отсутствие конкуренции. Чистый рынок — монополии и кризисы. Поэтому победила смешанная модель.</p>
+</section>
+
+<!-- 10 РЫНОК: ПРИЗНАКИ -->
+<section class="scene" data-scene>
+  <h2>Признаки рынка: четыре кита</h2>
+  <div class="grid g4">
+    <div class="card"><h3><span class="ico">🔑</span>Частная собственность</h3><p>Люди владеют ресурсами и могут ими распоряжаться.</p></div>
+    <div class="card"><h3><span class="ico">🚀</span>Свобода предпринимательства</h3><p>Любой может открыть бизнес и выбирать дело.</p></div>
+    <div class="card"><h3><span class="ico">🏁</span>Конкуренция</h3><p>Производители соперничают за покупателя — качество растёт, цены падают.</p></div>
+    <div class="card"><h3><span class="ico">🏷️</span>Свободные цены</h3><p>Цену определяют спрос и предложение, а не чиновник.</p></div>
+  </div>
+  <p class="subtitle">Частная собственность + свобода + конкуренция + свободные цены = саморегулирующийся рынок.</p>
+</section>
+
+<!-- 11 СПРОС И ПРЕДЛОЖЕНИЕ -->
+<section class="scene" data-scene>
+  <h2>Как формируется цена: спрос встречает предложение</h2>
+  <div class="chart-wrap">
+    <svg class="chart" viewBox="0 0 440 340">
+      <line class="axis" x1="50" y1="300" x2="420" y2="300"/>
+      <line class="axis" x1="50" y1="300" x2="50" y2="20"/>
+      <text class="lbl" x="410" y="322" text-anchor="end">Q — количество</text>
+      <text class="lbl" x="30" y="30">P — цена</text>
+      <path class="curve d-curve" d="M 70 40 Q 200 160 400 290"/>
+      <path class="curve s-curve" d="M 70 290 Q 200 160 400 40"/>
+      <line x1="225" y1="165" x2="225" y2="300" class="eq-line lbl"/>
+      <line x1="50" y1="165" x2="225" y2="165" class="eq-line lbl"/>
+      <circle class="dot" cx="225" cy="165" r="8"/>
+      <text class="lbl" x="285" y="58" fill="#d6dae2">Предложение: товара мало — цена растёт</text>
+      <text class="lbl" x="66" y="252" fill="#e9d6ae">Спрос: товара много — цена падает</text>
+      <text class="lbl" x="236" y="154" fill="#c9a548" font-weight="bold">Равновесие</text>
+    </svg>
+    <div class="price-note">
+      <p>• Товара <b>много</b> → цена <b>падает</b>.</p>
+      <p>• Товара <b>мало</b> → цена <b>растёт</b>.</p>
+      <p>• Спрос = предложение → <b>равновесная цена</b>. Никто не покупает и не продаёт «по принуждению».</p>
+      <p>Это «невидимая рука» Адама Смита: рынок сам находит баланс.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12 ПЛЮСЫ РЫНКА -->
+<section class="scene" data-scene>
+  <h2>Сильные стороны рынка</h2>
+  <div class="grid g4">
+    <div class="card"><h3><span class="ico ok">🕊️</span>Свобода</h3><p>Каждый выбирает, что производить, покупать и кому продавать.</p></div>
+    <div class="card"><h3><span class="ico ok">⚡</span>Эффективность</h3><p>Ресурсы текут туда, где они ценнее всего, — без указаний сверху.</p></div>
+    <div class="card"><h3><span class="ico ok">🔄</span>Гибкость</h3><p>Цены мгновенно реагируют на изменения спроса и предложения.</p></div>
+    <div class="card"><h3><span class="ico ok">🧠</span>Саморегулирование</h3><p>Избыток товара → цена падает → производство сокращается само.</p></div>
+  </div>
+  <p class="subtitle">Рынок — лучший из известных механизмов установления цен и распределения ресурсов. Но он не идеален…</p>
+</section>
+
+<!-- 13 ПРОВАЛЫ РЫНКА -->
+<section class="scene" data-scene>
+  <h2>«Провалы рынка»: пять случаев, когда рынок не справляется</h2>
+  <div class="grid g5">
+    <div class="card"><h3><span class="ico warn">📊</span>Неравенство</h3><p>Рынок награждает сильнейших; без вмешательства бедные беднеют.</p></div>
+    <div class="card"><h3><span class="ico warn">🌫️</span>Внешние эффекты</h3><p>Завод загрязняет воздух — платят все, кроме завода. Рынок этого «не видит».</p></div>
+    <div class="card"><h3><span class="ico warn">👑</span>Монополии</h3><p>Победитель уничтожает конкуренцию и диктует цены.</p></div>
+    <div class="card"><h3><span class="ico warn">📉</span>Кризисы</h3><p>Паника, безработица, банкротства — рынок не всегда самоисцеляется быстро.</p></div>
+    <div class="card"><h3><span class="ico warn">🏥</span>Слабые соцсферы</h3><p>Образование и медицина нужны обществу, но рынок их недофинансирует.</p></div>
+  </div>
+  <p class="subtitle">Вывод: где есть провал рынка — появляется законное место для государства.</p>
+</section>
+
+<!-- 14 ИНСТРУМЕНТЫ -->
+<section class="scene" data-scene>
+  <h2>Инструменты государства: два рычага</h2>
+  <div class="two-col">
+    <div class="panel mono">
+      <h3 class="mono-head">🏦 Монетарная политика — центральный банк</h3>
+      <ul>
+        <li>Ключевая ставка</li>
+        <li>Нормы обязательных резервов</li>
+        <li>Операции с облигациями</li>
+        <li>При спаде: ставка вниз → кредиты дешевле → экономика оживает</li>
+        <li>При инфляции: ставка вверх → денег меньше → цены стабилизируются</li>
+      </ul>
+    </div>
+    <div class="panel fisc">
+      <h3 class="fisc-head">🏛️ Фискальная политика — правительство</h3>
+      <ul>
+        <li>Налоги</li>
+        <li>Государственные расходы</li>
+        <li>При спаде: налоги вниз, расходы вверх → поддержка спроса</li>
+        <li>При инфляции: налоги вверх, расходы вниз → сдерживание</li>
+      </ul>
+    </div>
+  </div>
+  <p class="subtitle" style="color:var(--sand)">Правило на память: спад → стимулируем, инфляция → сдерживаем.</p>
+</section>
+
+<!-- 15 ПЕРЕХОД К РЫНКУ -->
+<section class="scene" data-scene>
+  <h2>Как переходить к рынку: две стратегии</h2>
+  <div class="versus">
+    <div class="vs-col left">
+      <h3>⚡ Шоковая терапия</h3>
+      <ul>
+        <li>Резкое снятие контроля цен</li>
+        <li>Быстрая приватизация</li>
+        <li>Боль в начале, но рынок формируется быстро</li>
+      </ul>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="vs-col right">
+      <h3>🐢 Градуализм</h3>
+      <ul>
+        <li>Постепенные шаги, поэтапность</li>
+        <li>Меньше социальной боли</li>
+        <li>Риск «застрять» на полпути</li>
+      </ul>
+    </div>
+  </div>
+  <p class="quote">Нет универсального рецепта: выбор зависит от ситуации в стране. Важен результат — конкурентный рынок с правилами.</p>
+</section>
+
+<!-- 16 ТЕМА 2 ИТОГ -->
+<section class="scene" data-scene>
+  <h2><span class="num">2</span>Итог темы</h2>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico">💱</span>Где применяется</h3><p>Цены и товары, банки и кредиты, бюджет и налоги, любой бизнес и потребитель.</p></div>
+    <div class="card"><h3><span class="ico">🎓</span>Зачем экономисту</h3><p>Понимать, как формируются цены, и точно знать: какой инструмент применять при спаде, а какой при инфляции.</p></div>
+  </div>
+  <p class="quote">Рынок лучше всех устанавливает цены и распределяет ресурсы, но не решает неравенство, монополии, экологию и кризисы.</p>
+</section>
+
+<!-- 17 ТЕМА 3 ТИТУЛ -->
+<section class="scene" data-scene>
+  <span class="tag">Тема 3 · Роль государства в рыночной экономике</span>
+  <h2><span class="num">3</span>Где государство нужно — и где мешает</h2>
+  <p class="subtitle type" data-type="Принцип: конкуренция там, где возможно; регулирование там, где необходимо."></p>
+</section>
+
+<!-- 18 ФУНКЦИИ ГОСУДАРСТВА -->
+<section class="scene" data-scene>
+  <h2>Зачем рынку государство: четыре функции</h2>
+  <div class="grid g4">
+    <div class="card"><h3><span class="ico">📜</span>Законы и правила игры</h3><p>Без договоров и судов сделки рискованны — рынок не работает без институций.</p></div>
+    <div class="card"><h3><span class="ico">🛡️</span>Защита собственности и конкуренции</h3><p>Антимонопольный контроль, защита прав собственников — условия самого рынка.</p></div>
+    <div class="card"><h3><span class="ico">🤝</span>Перераспределение доходов</h3><p>Налоги и соцпомощь сглаживают неравенство, которое рынок создаёт сам.</p></div>
+    <div class="card"><h3><span class="ico">🌉</span>Общественные блага</h3><p>Оборона, дороги, маяки — то, чем невыгодно заниматься частнику, но нужно всем.</p></div>
+  </div>
+  <p class="subtitle" style="color:var(--sand)">Ключевой довод: без государства некому защищать собственность и конкуренцию — это условия самого рынка.</p>
+</section>
+
+<!-- 19 ТРИ УРОВНЯ -->
+<section class="scene" data-scene>
+  <h2>Три уровня регулирования</h2>
+  <div class="flow" id="levelsFlow" style="gap:14px;">
+    <div class="step" style="padding:14px 22px;">🌍 <b>МАКРО</b><br><span style="font-size:16px;color:var(--muted)">вся страна: ВВП, инфляция, занятость</span></div>
+    <div class="arrow">➜</div>
+    <div class="step" style="padding:14px 22px;">🏭 <b>МЕЗО</b><br><span style="font-size:16px;color:var(--muted)">отрасли и регионы: поддержка секторов</span></div>
+    <div class="arrow">➜</div>
+    <div class="step" style="padding:14px 22px;">🏪 <b>МИКРО</b><br><span style="font-size:16px;color:var(--muted)">фирмы и домохозяйства: лицензии, контроль</span></div>
+  </div>
+  <div class="grid g3" style="margin-top:24px;">
+    <div class="card"><h3><span class="ico">🏛️</span>Кто участвует</h3><p>Три ветви власти (законодательная, исполнительная, судебная), центральный банк, профсоюзы и союзы предпринимателей.</p></div>
+    <div class="card"><h3><span class="ico">✋</span>Прямые методы</h3><p>Законы, лицензии, госзаказ, госсектор. Быстро и жёстко, но рискуют подавить инициативу.</p></div>
+    <div class="card"><h3><span class="ico">🌊</span>Косвенные методы</h3><p>Монетарная и фискальная политика. Мягче: государство влияет через деньги и налоги, а не приказы.</p></div>
+  </div>
+</section>
+
+<!-- 20 ПРОВАЛЫ ГОСУДАРСТВА -->
+<section class="scene" data-scene>
+  <h2>«Провалы государства»: шесть болезней власти</h2>
+  <div class="grid g3">
+    <div class="card"><h3><span class="ico warn">🔍</span>Нехватка информации</h3><p>Чиновник не знает рынок лучше миллионов покупателей — решения принимаются «вслепую».</p></div>
+    <div class="card"><h3><span class="ico warn">📚</span>Бюрократия</h3><p>Процедуры важнее результата: бумага побеждает смысл, решения затягиваются.</p></div>
+    <div class="card"><h3><span class="ico warn">👁️</span>Слабый контроль общества</h3><p>Нет обратной связи — ошибки не исправляются годами.</p></div>
+    <div class="card"><h3><span class="ico warn">🗳️</span>Политика перед выборами</h3><p>Решения ради голосов, а не экономики: популистские обещания вместо реформ.</p></div>
+    <div class="card"><h3><span class="ico warn">💼</span>Лоббизм</h3><p>Решения в интересах узких групп, а не общества.</p></div>
+    <div class="card"><h3><span class="ico warn">😴</span>Слабая мотивация</h3><p>Госслужащему не грозит банкротство за плохую работу — в отличие от предпринимателя.</p></div>
+  </div>
+  <p class="subtitle">Лекарства: сильные законы, конкуренция плюс регулирование, грамотное управление госсобственностью.</p>
+</section>
+
+<!-- 21 РЫНОК VS ГОСУДАРСТВО -->
+<section class="scene" data-scene>
+  <h2>Рынок vs Государство: у обеих сторон есть сила и слабость</h2>
+  <div class="versus">
+    <div class="vs-col left">
+      <h3>🛒 Рынок</h3>
+      <ul>
+        <li>Эффективность и гибкость</li>
+        <li>Свобода выбора</li>
+        <li>Саморегулирование</li>
+      </ul>
+      <ul class="bad" style="margin-top:8px;">
+        <li>Неравенство</li>
+        <li>Монополии и кризисы</li>
+        <li>Внешние эффекты</li>
+      </ul>
+    </div>
+    <div class="vs-badge">⚖️</div>
+    <div class="vs-col right">
+      <h3>🏛️ Государство</h3>
+      <ul>
+        <li>Порядок и правила игры</li>
+        <li>Справедливость и соцзащита</li>
+        <li>Общественные блага</li>
+      </ul>
+      <ul class="bad" style="margin-top:8px;">
+        <li>Бюрократия и лоббизм</li>
+        <li>Нехватка информации</li>
+        <li>Риск неэффективности</li>
+      </ul>
+    </div>
+  </div>
+  <p class="subtitle">Рынок даёт эффективность, но не справедливость. Государство даёт порядок и справедливость, но может быть неэффективным.</p>
+</section>
+
+<!-- 22 ТЕМА 3 ИТОГ -->
+<section class="scene" data-scene>
+  <h2><span class="num">3</span>Итог темы</h2>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico">🔎</span>Где применяется</h3><p>Любая оценка действий власти: закон, налог, субсидия, запрет — экономист должен видеть и эффект, и риски.</p></div>
+    <div class="card"><h3><span class="ico">🎓</span>Зачем экономисту</h3><p>Отличать полезное вмешательство от вредного и заранее видеть риски: бюрократию, лоббизм, нехватку информации.</p></div>
+  </div>
+  <p class="quote">Государство исправляет провалы рынка, но само ошибается. Задача экономиста — отличать ошибки друг друга.</p>
+</section>
+
+<!-- 23 ГЛАВНОЕ РАЗЛИЧИЕ -->
+<section class="scene" data-scene>
+  <h2>Главные различия трёх тем — одним взглядом</h2>
+  <div class="grid g3">
+    <div class="card"><h3><span class="ico" style="background:linear-gradient(135deg,#e9d6ae,#c9a548);color:#14100a;">1</span>Тема 1: «Что хотим»</h3><p>Цели и планы государства: благосостояние, свобода, рост, занятость, стабильные цены.</p></div>
+    <div class="card"><h3><span class="ico" style="background:linear-gradient(135deg,#2e6b6e,#123f42);">2</span>Тема 2: «Как работает рынок»</h3><p>Механизм цен, четыре системы, провалы рынка, инструменты политики.</p></div>
+    <div class="card"><h3><span class="ico" style="background:linear-gradient(135deg,#6d3b7a,#3f1d47);">3</span>Тема 3: «Что делает государство»</h3><p>Роль, уровни, участники, методы и собственные ошибки власти.</p></div>
+  </div>
+  <p class="subtitle" style="margin-top:24px;font-size:25px;">
+    Цепочка: <b style="color:var(--sand)">цели</b> → <b style="color:var(--silver)">механизм</b> → <b style="color:#c9a2d6">действия</b>. Пропустите звено — картина разваливается.
+  </p>
+</section>
+
+<!-- 24 СИЛЬНЕЙШИЙ АРГУМЕНТ -->
+<section class="scene" data-scene>
+  <span class="tag">Аргумент на защиту</span>
+  <h2>Почему спор «рынок ИЛИ государство» неверен</h2>
+  <p class="final">
+    У обеих сторон есть ошибки, и они <span class="hl">разные</span>.
+    Провал рынка бьёт по людям <span class="hl2">сразу</span>: кризис, безработица, монополия.
+    Провал государства накапливается <span class="hl">медленно</span>, но его труднее заметить и исправить — чиновник не разоряется.
+  </p>
+  <div class="scale">→ Лучшая модель — <b style="color:var(--gold)">смешанная</b>: рынок по умолчанию, государство вмешивается <b>точечно</b>, там, где есть доказанный провал рынка, — с чёткими правилами, сроками и отчётностью. Не меньше и не больше государства — <b>умнее</b>. ←</div>
+</section>
+
+<!-- 25 ВОЗРАЖЕНИЕ -->
+<section class="scene" data-scene>
+  <span class="tag">Разбор возражения</span>
+  <h2>«Любое вмешательство государства вредно»</h2>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ico warn">❓</span>Возражение</h3><p>Государство только мешает: налоги, запреты, бюрократия. Рынок справится сам.</p></div>
+    <div class="card"><h3><span class="ico ok">✅</span>Ответ</h3><p>Без государства некому защищать собственность и конкуренцию — а это условия самого рынка. Кто судит по договорам, кто наказывает монополиста, кто строит дорогу к заводу?</p></div>
+  </div>
+  <p class="quote">Правильный вопрос не «вмешиваться или нет», а «где, насколько и с какими правилами».</p>
+</section>
+
+<!-- 26 ФИНАЛ -->
+<section class="scene" data-scene>
+  <span class="tag">Вывод</span>
+  <h1 style="font-size:52px;">Рынок двигает экономику.<br>Государство направляет.</h1>
+  <p class="final" style="margin-top:22px;">
+    Задача экономиста — найти <span class="hl">баланс</span> между свободой рынка и регулированием.
+    Рынок и государство — не соперники, а <span class="hl2">дополнения</span> друг друга.
+  </p>
+  <div class="flow" id="finalFlow" style="margin-top:24px;">
+    <div class="step">🎯 Тема 1: цели и приоритеты</div><div class="arrow">➜</div>
+    <div class="step">⚖️ Тема 2: механизм и провалы</div><div class="arrow">➜</div>
+    <div class="step">🏛️ Тема 3: роль и баланс</div>
+  </div>
+  <p class="subtitle" style="margin-top:24px;color:var(--gold);font-size:24px;">Спасибо за внимание! Вопросы?</p>
+</section>
+
+</div><!-- /stage -->
+
+<div id="nav">
+  <button id="prevBtn">◀ Назад</button>
+  <button id="nextBtn">Далее ▶</button>
+</div>
+<div id="counter">1 / 26</div>
+<div class="hint"><kbd>←</kbd> <kbd>→</kbd> — листать · <kbd>Home</kbd> — в начало · F11 — полный экран</div>
+
+<script>
+const stage=document.getElementById('stage');
+function fit(){
+  const s=Math.min(innerWidth/1280,innerHeight/720);
+  stage.style.transform='translate(-50%,-50%) scale('+s+')';
+}
+addEventListener('resize',fit); fit();
+
+const scenes=[...document.querySelectorAll('[data-scene]')];
+let cur=0, timers=[];
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+
+function clearTimers(){timers.forEach(t=>clearTimeout(t));timers=[];}
+function later(fn,ms){timers.push(setTimeout(fn,ms));}
+
+function activate(i){
+  clearTimers();
+  scenes.forEach((s,idx)=>s.classList.toggle('active',idx===i));
+  counter.textContent=(i+1)+' / '+scenes.length;
+  progress.style.width=((i+1)/scenes.length*100)+'%';
+  const sc=scenes[i];
+  sc.querySelectorAll('.card,.panel,.sys,.pyr,.vs-col').forEach((el,k)=>{
+    el.classList.remove('in'); later(()=>el.classList.add('in'),250+k*120);
+  });
+  sc.querySelectorAll('.step,.arrow').forEach((el,k)=>{
+    el.classList.remove('in'); later(()=>el.classList.add('in'),200+k*160);
+  });
+  sc.querySelectorAll('.curve,.dot,.lbl').forEach((el,k)=>{
+    el.classList.remove('in'); later(()=>el.classList.add('in'),400+k*220);
+  });
+  sc.querySelectorAll('.quote,.scale').forEach((el,k)=>{
+    el.classList.remove('in'); later(()=>el.classList.add('in'),850+k*250);
+  });
+  const typer=sc.querySelector('[data-type]');
+  if(typer){
+    const full=typer.dataset.type; typer.innerHTML='<span class="caret">&nbsp;</span>';
+    let j=0;
+    const tick=()=>{ if(j<=full.length){
+      typer.innerHTML=full.slice(0,j)+'<span class="caret">&nbsp;</span>'; j++;
+      timers.push(setTimeout(tick,20));
+    }};
+    later(tick,300);
+  }
+}
+
+document.getElementById('nextBtn').onclick=()=>{ if(cur<scenes.length-1){cur++;activate(cur);} };
+document.getElementById('prevBtn').onclick=()=>{ if(cur>0){cur--;activate(cur);} };
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ if(cur<scenes.length-1){cur++;activate(cur);} }
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){ if(cur>0){cur--;activate(cur);} }
+  if(e.key==='Home'){ cur=0; activate(cur); }
+  if(e.key==='End'){ cur=scenes.length-1; activate(cur); }
+});
+let tx=null;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+document.addEventListener('touchend',e=>{
+  if(tx===null)return; const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>60){ if(dx<0&&cur<scenes.length-1){cur++;activate(cur);} if(dx>0&&cur>0){cur--;activate(cur);} }
+  tx=null;
+});
+/* золотые частицы на титуле */
+const first=scenes[0];
+for(let k=0;k<30;k++){
+  const p=document.createElement('div'); p.className='particle';
+  const sz=3+Math.random()*5;
+  p.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+(Math.random()*100)+'%;'
+    +'animation-duration:'+(7+Math.random()*10)+'s;animation-delay:'+(-Math.random()*12)+'s;';
+  first.appendChild(p);
+}
+activate(0);
+</script>
+</body>
+</html>
